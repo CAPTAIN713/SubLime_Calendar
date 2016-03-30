@@ -7,7 +7,13 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:name="com.orm.SugarApp">
+
+        <!-- sugar ORM website: http://satyan.github.io/sugar/index.html-->
+        <!-- Name of the generated sqlite database file.-->
+        <meta-data android:name="DATABASE" android:value="SLC_sugar_database.db" />
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
