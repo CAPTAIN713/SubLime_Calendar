@@ -1,9 +1,10 @@
 package com.example.eric.sublime_calendar;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -14,14 +15,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.roomorama.caldroid.CaldroidFragment;
 
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     /*example on how to make a calendar
     not doing this: http://javatechig.com/?s=calendar&search-type=normal */
@@ -39,21 +39,6 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.addFAB);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Fragment fragment = new FragmentAddEvent();
-                if (fragment != null) {
-                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.mainCalendarContainer, fragment);
-                    transaction.addToBackStack(null);
-                    /*if(fab.getVisibility()==View.VISIBLE) {
-                        fab.hide();
-                    }*/
-                    transaction.commit();
-                }
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -75,6 +60,7 @@ public class MainActivity extends AppCompatActivity
         transaction .replace(R.id.mainCalendarContainer, caldroidFragment);
         transaction .commit();
 
+        fab.setOnClickListener(this);
     }
 
     @Override
@@ -145,4 +131,26 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-}
+
+    @Override
+    public void onClick(View v) {
+        /* for example on how to go from one fragment to another
+        Fragment fragment = new FragAddEvent();
+        if (fragment != null) {
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.mainCalendarContainer, fragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
+            }*/
+        switch (v.getId()){
+            case R.id.addFAB:
+                //make new intent; intent is used for activities, not fragments
+                Intent myIntent = new Intent(this, ActivityAddEvent.class);
+                this.startActivity(myIntent); //start new activity, old one does not go away
+                break;
+        }
+    } //end of onClick method
+
+
+} //end of activity class
