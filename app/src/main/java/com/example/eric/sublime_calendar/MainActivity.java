@@ -15,19 +15,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.roomorama.caldroid.CaldroidFragment;
+import com.roomorama.caldroid.CaldroidListener;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
-    /*example on how to make a calendar
-    not doing this: http://javatechig.com/?s=calendar&search-type=normal */
-    // not doing this: CalendarView monthCalendar; //found at https://www.youtube.com/watch?v=ZHLCfqN-60A
+    //used when setting up how the date is displayed
+    final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
 
-    //using these two links link A goes to link B
+    //using these two links link A (stack) goes to link B (github)
     //stackover flow: http://stackoverflow.com/questions/16556254/android-calendarview-for-showing-events
     //actual website: https://github.com/roomorama/Caldroid
 
@@ -50,6 +53,23 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         CaldroidFragment caldroidFragment = new CaldroidFragment();
+        final CaldroidListener calListener = new CaldroidListener() {
+            @Override
+            public void onSelectDate(Date date, View view) {
+                //Toast.makeText(getApplicationContext(), formatter.format(date), Toast.LENGTH_SHORT).show();
+                Fragment fragment = new FragmentSingleEventView();
+                if (fragment != null) {
+                    /** Kristina, this is where you would put the code to go to day view
+                     * just change the above new fragment class to your day view java class **/
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.mainCalendarContainer, fragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
+            }
+        };
+
+        caldroidFragment.setCaldroidListener(calListener);
         Bundle args = new Bundle();
         Calendar cal = Calendar.getInstance();
         args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1);
